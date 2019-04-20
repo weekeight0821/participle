@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectDictionaryState">
-    <dictionary name="yanwei" />
-  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.700" project-jdk-type="Python SDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
