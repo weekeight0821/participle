@@ -1,2 +1,2 @@
-print('hello world','great')
+print('hello world','great000000')
 
