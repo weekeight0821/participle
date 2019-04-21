@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+    <title>中文分词处理</title>
+    <link rel = stylesheet type="text/css" href = "{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='jquery-3.3.1.js') }}"></script>
+</head>
+<body>
+
+<h1>中文分词处理</h1>
+<h3>请输入一段文本</h3>
+<form name="myform1" method="post">
+    文本:<br>
+    <input type="file" name="file" id="filePicker"/>
+    <input type="button" value = "显示"  onclick="show()"/><br>
+    <p></p>
+    <textarea name="text" id="text" cols="100" rows="8">{{ data1 }}</textarea><br>
+    <p></p>
+    <input type="button" id="tj" value="提交文本" >
+</form>
+
+<!--文本输入框-->
+<div  style="margin: 20px">
+    <fieldset id = "s3" class="controlGroup verticalStacking">
+        <legend id="s2" class="controlGroupName">Choose options:</legend>
+    </fieldset>
+</div>
+
+<input id= "btn" type="button" value="合并" onclick="ff()">
+<p></p>
+
+<form name="myform2">
+    <input id="selectedwords" name="selectedwords" type="text" value="">
+    <input type="button" id="addwords" value="加入词库" >
+</form>
+
+{#  消息闪现，输入不能为空#}
+{% for massage in get_flashed_messages() %}
+    {{ massage}}
+{% endfor %}
+
+<script type="text/javascript">
+
+    {# 合并 #}
+    function ff() {
+        var r = document.getElementsByName("ck");
+        var str = "";
+        //document.write(r.length);
+        for (var i = 0; i < r.length; i++) {
+            if (r[i].checked) {
+                str=str + r[i].nextSibling.lastChild.nodeValue;
+            }
+        }
+        document.myform2.selectedwords.value=str;
+        for (var i = 0; i < r.length; i++) {
+            if (r[i].checked) {
+                r[i].checked=false;
+            }
+        }
+    }
+
+    {# 导入文件#}
+    function show()
+    {
+        $('#text').val('');
+        $('#s3').empty();
+        $('#selectedwords').val(' ');
+        var reader = new FileReader();
+        reader.onload = function()
+        {
+            document.getElementById("text").value=this.result;
+        }
+        var f = document.getElementById("filePicker").files[0];
+        reader.readAsText(f);
+    }
+</script>
+{# 加入词库 #}
+<script type="text/javascript">
+    var selectedwords = $("#selectedwords")
+    var submit_button = $("#addwords");
+    submit_button.click(function (){
+        //console.log($("select").val())
+        var value = selectedwords.val();
+        $.post("./flask/add", {
+            str: value
+        }, function (res) {
+            console.log(JSON.parse(res))
+            var beforeHtml = $("#output").html();
+            $("#output").html(beforeHtml  + '</br>' + res);
+        })
+        return false;
+    })
+
+
+    {# 提交文本处理 #}
+    var submit_button = $("#tj");
+    submit_button.click(function(){
+        var value = $("#text").val();
+        $.post("/flask/fc", {
+            str: value
+        }, function (res) {
+            //$("#tj").attr("button",true);
+            $('#s3').empty('');
+            var arr=new Array();
+            for(var j=0;j<res.length;j++){
+                arr[j]=j;
+            }
+            for (var i = 0; i < res.length; i++) {
+
+                var oCheckbox = document.createElement("input");
+                var mylabel = document.createElement("label");
+                var myText = document.createTextNode(res[i]);
+                oCheckbox.setAttribute("type", "checkbox");
+                oCheckbox.setAttribute("name", "ck");
+                oCheckbox.setAttribute("class", "regular-checkbox");
+                oCheckbox.id = arr[i];
+                oCheckbox.appendChild(mylabel);
+                mylabel.setAttribute("for", arr[i])
+                mylabel.setAttribute("id", "lab");
+                mylabel.setAttribute("class", "my-check-label");
+                mylabel.innerHTML = res[i];
+
+                var mydiv = document.getElementById("s3");
+                mydiv.appendChild(oCheckbox);
+                mydiv.appendChild(mylabel);
+            }
+        })
+        return false;
+    })
+</script>
+</body>
+</html>

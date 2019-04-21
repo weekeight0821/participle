@@ -1,0 +1,49 @@
+body{
+    background-color:#569AD0;
+    margin-left: 20%;
+    margin-right: 20%;
+    padding: 10px 10px 10px 10px;
+    font-family: Constantia, "Lucida Bright", "DejaVu Serif", Georgia, "serif"
+}
+.my-check-.my-check-label{
+    display: inline;
+}
+
+
+.regular-checkbox {
+    display: none;
+}
+
+
+.regular-checkbox + .my-check-label {
+    background-color: #fafafa;
+    border: 1px solid #cacece;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+    padding: 5px;
+    border-radius: 3px;
+    display: inline-block;
+    position: relative;
+}
+
+
+.regular-checkbox + .my-check-label:active, .regular-checkbox:checked + .my-check-label:active {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+}
+
+
+.regular-checkbox:checked + .my-check-label {
+    background-color: #fd8540;
+    border: 1px solid white;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+    color: #99a1a7;
+}
+
+
+.regular-checkbox:checked + .my-check-label:after {
+    content: '\2714';
+    font-size: 10px;
+    position: absolute;
+    top: -3px;
+    left: 1px;
+    color: white;
+}
